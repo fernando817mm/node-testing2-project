@@ -28,4 +28,16 @@ describe("Users End Points", () => {
       expect(inserted.status).toBe(422);
     });
   });
+
+  describe("[DELETE] | /users/:id", () => {
+    test("returns correct object", async () => {
+      const deleted = await request(server).delete("/users/4");
+      expect(deleted.body).toMatchObject({ user_id: 4, username: "benito" });
+    });
+    test("deletes user from database", async () => {
+      await request(server).delete("/users/4");
+      const users = await db("users");
+      expect(users).toHaveLength(3);
+    });
+  });
 });
